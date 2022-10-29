@@ -8,7 +8,8 @@ import 'package:draftfakecall/audio_menus.dart';
 class DetailScreenAudio extends StatefulWidget{
   final String audioasset;
   final String imageasset;
-  const DetailScreenAudio({Key? key, required this.audioasset, required this.imageasset}) : super(key: key);
+  final player;
+  const DetailScreenAudio({Key? key, required this.audioasset, required this.imageasset, required this.player}) : super(key: key);
 
   @override
   _DetailScreenAudioState createState() => _DetailScreenAudioState();
@@ -22,6 +23,7 @@ class _DetailScreenAudioState extends State<DetailScreenAudio>{
   void initState(){
     super.initState();
     imageasset = widget.imageasset;
+    player = AudioPlayer();
   }
 
 
@@ -61,6 +63,7 @@ class _DetailScreenAudioState extends State<DetailScreenAudio>{
                       Navigator.of(context).pop();
                     },*/
                       onPressed: () async {
+                        player.stop();
                          Navigator.of(context).pop();
                          },
                   ),
