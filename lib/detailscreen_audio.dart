@@ -23,7 +23,6 @@ class _DetailScreenAudioState extends State<DetailScreenAudio>{
   void initState(){
     super.initState();
     imageasset = widget.imageasset;
-    player = AudioPlayer();
   }
 
 
@@ -79,7 +78,7 @@ class _DetailScreenAudioState extends State<DetailScreenAudio>{
                   width: screenWidth,
                   child: Column(
                     children: [
-                      AudioFile(audioasset: widget.audioasset,)
+                      AudioFile(audioasset: widget.audioasset,player: player,)
                     ],
                   )
               ),)

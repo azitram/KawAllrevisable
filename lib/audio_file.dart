@@ -7,7 +7,8 @@ import 'package:draftfakecall/detailscreen_audio.dart';
 
 class AudioFile extends StatefulWidget {
   final String audioasset;
-  const AudioFile({Key? key, required this.audioasset}) : super(key: key);
+  final   AudioPlayer player;
+  const AudioFile({Key? key, required this.audioasset, required this.player,}) : super(key: key);
 
   @override
   State<AudioFile> createState() => _AudioFileState();
@@ -23,8 +24,6 @@ class _AudioFileState extends State<AudioFile> {
   int currentpos = 0;
   late Uint8List audiobytes;
 
-  AudioPlayer player = AudioPlayer();
-
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
@@ -33,14 +32,14 @@ class _AudioFileState extends State<AudioFile> {
       audiobytes = bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
       //convert ByteData to Uint8List
 
-      player.onDurationChanged.listen((Duration d) { //get the duration of audio
+      widget.player.onDurationChanged.listen((Duration d) { //get the duration of audio
         maxduration = d.inMilliseconds;
         setState(() {
 
         });
       });
 
-      player.onAudioPositionChanged.listen((Duration  p){
+      widget.player.onAudioPositionChanged.listen((Duration  p){
         currentpos = p.inMilliseconds; //get the current position of playing audio
 
         //generating the duration label
@@ -64,7 +63,7 @@ class _AudioFileState extends State<AudioFile> {
   }
 
   void stopBack(){
-    player.stop();
+    widget.player.stop();
     Navigator.of(context).pop();
   }
 
@@ -81,7 +80,7 @@ class _AudioFileState extends State<AudioFile> {
                 IconButton(
                   onPressed: () async {
                     if(!isplaying && !audioplayed){
-                      int result = await player.playBytes(audiobytes);
+                      int result = await widget.player.playBytes(audiobytes);
                       if(result == 1){ //play success
                         setState(() {
                           isplaying = true;
@@ -91,7 +90,7 @@ class _AudioFileState extends State<AudioFile> {
                         print("Error while playing audio.");
                       }
                     }else if(audioplayed && !isplaying){
-                      int result = await player.resume();
+                      int result = await widget.player.resume();
                       if(result == 1){ //resume success
                         setState(() {
                           isplaying = true;
@@ -101,7 +100,7 @@ class _AudioFileState extends State<AudioFile> {
                         print("Error on resume audio.");
                       }
                     }else{
-                      int result = await player.pause();
+                      int result = await widget.player.pause();
                       if(result == 1){ //pause success
                         setState(() {
                           isplaying = false;
@@ -130,7 +129,7 @@ class _AudioFileState extends State<AudioFile> {
                       label: currentpostlabel,
                       onChanged: (double value) async {
                         int seekval = value.round();
-                        int result = await player.seek(Duration(milliseconds: seekval));
+                        int result = await widget.player.seek(Duration(milliseconds: seekval));
                         if(result == 1){ //seek successful
                           currentpos = seekval;
                         }else{
@@ -150,7 +149,7 @@ class _AudioFileState extends State<AudioFile> {
                       ),
                       IconButton(
                         onPressed: () async {
-                          int result = await player.stop();
+                          int result = await widget.player.stop();
                           if(result == 1){ //stop success
                             setState(() {
                               isplaying = false;
